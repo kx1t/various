@@ -9,10 +9,12 @@
 #
 # The script will detect and read the first 6 RTL-SDR devices that are connected to the machine. Any subsequent devices are ignored.
 #
+# When pulling this script from github, please make sure that the EXECUTE flag for the file is set (chmod a=rx serial2device)
+#
 # Copyright 2021 Ramon F. Kolb - licensed under the terms and conditions
 # of GPLv3. The terms and conditions of this license are included with the Github
 # distribution of this package, and are also available here:
-# https://github.com/kx1t/planefence/
+# https://github.com/kx1t/various
 #
 # Summary of License Terms
 # This program is free software: you can redistribute it and/or modify it under the terms of
