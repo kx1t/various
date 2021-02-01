@@ -7,6 +7,8 @@
 # The script renders the Device ID to stdout, and also exports the DEVICE parameter with this value
 # If no input is provided or if the <serial_of_RTLSDR> is not found, the script will render an error text to STDERR and exit with code 1.
 #
+# The script will detect and read the first 6 RTL-SDR devices that are connected to the machine. Any subsequent devices are ignored.
+#
 # Copyright 2021 Ramon F. Kolb - licensed under the terms and conditions
 # of GPLv3. The terms and conditions of this license are included with the Github
 # distribution of this package, and are also available here:
