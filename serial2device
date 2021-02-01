@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# serial2device <serial_of_RTLSDR>
+#
+# SERIAL2DEVICE - a Bash shell script to return the Device ID based on the serial number of an installed RTL-SDR dongle
+#
+# The script renders the Device ID to stdout, and also exports the DEVICE parameter with this value
+# If no input is provided or if the <serial_of_RTLSDR> is not found, the script will render an error text to STDERR and exit with code 1.
+#
+# Copyright 2021 Ramon F. Kolb - licensed under the terms and conditions
+# of GPLv3. The terms and conditions of this license are included with the Github
+# distribution of this package, and are also available here:
+# https://github.com/kx1t/planefence/
+#
+# Summary of License Terms
+# This program is free software: you can redistribute it and/or modify it under the terms of
+# the GNU General Public License as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with this program.
+# If not, see https://www.gnu.org/licenses/.
+#
+# This script assumes that `rtl_test` has been installed.
+
+# Check that a valid input is provided:
+if [ "$1" == "" ]
+then
+	echo "Usage: serial2device <serial_of_RTLSDR>" >&2
+	exit 1
+fi
+
+# Do the actual lookup and formatting:
+export DEVICE=$(IFS=$'\n' read -r -d '' -a a < <( timeout 2s rtl_test -d 0 2>&1 | head -n 7 | tail +2 && printf '\0' ); c=0; while [ "$c" -le 10 ]; do printf "%u %s\n" "${a[c]%%':'*}" "${a[c++]##*'SN: '}"; [ "${a[c]:3:1}" != ":" ] && break; done | grep $1 | cut -f1 -d" ")
+
+# If successful, print the Device ID. If not, error and exit.
+if [ "$DEVICE" != "" ]
+then
+	echo $DEVICE
+else
+	echo $1: Device not found >&2
+	exit 1
+fi
