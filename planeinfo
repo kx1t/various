@@ -1,0 +1,20 @@
+#!/bin/bash
+plane=$1
+
+function printtag
+{
+echo $1: $(grep -i "td data-label=\"$1" /tmp/faaquery.tmp |head -1 | xargs |sed 's/<\/\?[^>]\+>//g' | tr -d "[:cntrl:]")
+
+}
+
+wget -qO- https://registry.faa.gov/AircraftInquiry/Search/NNumberResult?nNumberTxt=${plane:1} > /tmp/faaquery.tmp
+
+printtag model
+printtag manufacturer
+printtag "aircraft type"
+printtag "engine type"
+printtag "mfr year"
+printtag "mode s code (base 16 / hex)"
+printtag name
+
+rm /tmp/faaquery.tmp
