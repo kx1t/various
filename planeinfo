@@ -1,4 +1,11 @@
 #!/bin/bash
+if [ "$1" == "" ]
+then
+	echo "Usage: planeinfo <N-number>"
+	exit 1
+fi
+
+
 plane=$1
 
 function printtag
@@ -7,10 +14,10 @@ echo $1: $(grep -i "td data-label=\"$1" /tmp/faaquery.tmp |head -1 | xargs |sed 
 
 }
 
-wget -qO- https://registry.faa.gov/AircraftInquiry/Search/NNumberResult?nNumberTxt=${plane:1} > /tmp/faaquery.tmp
+wget -qO /tmp/faaquery.tmp https://registry.faa.gov/AircraftInquiry/Search/NNumberResult?nNumberTxt=${plane:1}
 
-printtag model
 printtag manufacturer
+printtag model
 printtag "aircraft type"
 printtag "engine type"
 printtag "mfr year"
